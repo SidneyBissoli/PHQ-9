@@ -1,0 +1,423 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                      PHQ-9 ANÁLISE - CHEAT SHEET                           ║
+║                        Referência Rápida v3.0                              ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─ COMANDOS ESSENCIAIS ───────────────────────────────────────────────────────┐
+
+1️⃣  ANÁLISE BÁSICA COMPLETA
+   source("scripts/analise_phq9_basico.R")
+
+2️⃣  ANÁLISE AVANÇADA COMPLETA
+   source("scripts/analise_phq9_avancado.R")
+
+3️⃣  GERAR RELATÓRIO BÁSICO (HTML + PDF)
+   source("scripts/relatorio_phq9_basico.R")
+
+4️⃣  GERAR RELATÓRIO AVANÇADO (HTML + PDF)
+   source("scripts/relatorio_phq9_avancado.R")
+
+5️⃣  INSTALAR LATEX (para PDF)
+   install.packages("tinytex")
+   tinytex::install_tinytex()
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ DIFERENÇA ENTRE ANÁLISES ──────────────────────────────────────────────────┐
+
+📊 ANÁLISE BÁSICA (analise_phq9_basico.R):
+   • Cálculo de escores totais
+   • Categorização de severidade
+   • Estatísticas descritivas
+   • Análise por sexo e idade
+   • Alfa de Cronbach
+   • 6 gráficos básicos
+   • 6 arquivos CSV
+   ⏱️ Tempo: ~30 segundos
+   👤 Ideal para: Primeira análise, relatórios simples
+
+📈 ANÁLISE AVANÇADA (analise_phq9_avancado.R):
+   • Tudo da análise básica +
+   • Função reutilizável analisar_phq9()
+   • Análise item por item (detalhada)
+   • Teste t (comparação entre sexos)
+   • Correlações (idade vs escore)
+   • Top 3 sintomas mais prevalentes
+   • Relatório executivo
+   • 6 gráficos avançados
+   • 5 arquivos CSV especializados
+   ⏱️ Tempo: ~45 segundos
+   👤 Ideal para: Publicações, análises comparativas
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ FUNÇÃO analisar_phq9() (APENAS NA ANÁLISE AVANÇADA) ──────────────────────┐
+
+SINTAXE:
+   analisar_phq9(dados, gerar_graficos = TRUE, 
+                 salvar_resultados = TRUE, prefixo_arquivo = "PHQ9")
+
+EXEMPLOS:
+
+   # Análise básica com função
+   resultado <- analisar_phq9(meus_dados)
+
+   # Sem gerar gráficos
+   resultado <- analisar_phq9(meus_dados, gerar_graficos = FALSE)
+
+   # Com prefixo personalizado
+   resultado <- analisar_phq9(meus_dados, prefixo_arquivo = "Estudo2025")
+
+   # Múltiplos estudos
+   res1 <- analisar_phq9(dados1, prefixo_arquivo = "Estudo1")
+   res2 <- analisar_phq9(dados2, prefixo_arquivo = "Estudo2")
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ ESTRUTURA DE DADOS NECESSÁRIA ─────────────────────────────────────────────┐
+
+Seu CSV deve ter estas colunas:
+
+   • idade       → Numérico (ex: 25, 42, 67)
+   • sexo        → "M" ou "F"
+   • PHQ9_1      → Valores: 0, 1, 2 ou 3
+   • PHQ9_2      → Valores: 0, 1, 2 ou 3
+   • ...
+   • PHQ9_9      → Valores: 0, 1, 2 ou 3
+
+EXEMPLO:
+   id,idade,sexo,PHQ9_1,PHQ9_2,PHQ9_3,...,PHQ9_9
+   1,25,F,0,1,2,...,1
+   2,42,M,1,0,0,...,0
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ ARQUIVOS GERADOS (ANÁLISE BÁSICA) ─────────────────────────────────────────┐
+
+CSV (6 arquivos em resultados/csv/):
+   📄 PHQ9_BAS_dados_processados.csv          → Dataset completo
+   📄 PHQ9_BAS_estatisticas_descritivas.csv   → Estatísticas gerais
+   📄 PHQ9_BAS_distribuicao_severidade.csv    → Contagem por categoria
+   📄 PHQ9_BAS_analise_sexo.csv               → Comparação M vs F
+   📄 PHQ9_BAS_faixas_etarias.csv             → Análise por idade
+   📄 PHQ9_BAS_confiabilidade.csv             → Alfa de Cronbach
+
+PNG (6 gráficos em resultados/graficos/, 300 DPI):
+   🖼️  PHQ9_BAS_1_distribuicao_escores.png    → Histograma geral
+   🖼️  PHQ9_BAS_2_severidade_barras.png       → Categorias de severidade
+   🖼️  PHQ9_BAS_3_comparacao_sexos.png        → Boxplot M vs F
+   🖼️  PHQ9_BAS_4_idade_dispersao.png         → Idade vs escore
+   🖼️  PHQ9_BAS_5_faixas_etarias.png          → Violinplot por faixa
+   🖼️  PHQ9_BAS_6_heatmap_itens.png           → Correlações entre itens
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ ARQUIVOS GERADOS (ANÁLISE AVANÇADA) ───────────────────────────────────────┐
+
+CSV (5 arquivos em resultados/csv/):
+   📄 PHQ9_analise_dados_processados.csv      → Dataset completo
+   📄 PHQ9_analise_itens_detalhada.csv        → Estatísticas por item
+   📄 PHQ9_analise_bivariada.csv              → Testes estatísticos
+   📄 PHQ9_confiabilidade.csv                 → Alfa de Cronbach
+   📄 PHQ9_relatorio_executivo.csv            → Resumo executivo
+
+PNG (6 gráficos em resultados/graficos/, 300 DPI):
+   🖼️  PHQ9_AVA_1_analise_itens.png           → Média por item
+   🖼️  PHQ9_AVA_2_comparacao_sexos.png        → Boxplot M vs F
+   🖼️  PHQ9_AVA_3_idade_escore_dispersao.png  → Dispersão idade
+   🖼️  PHQ9_AVA_4_heatmap_respostas.png       → Padrão respostas
+   🖼️  PHQ9_AVA_5_severidade_sexo_prop.png    → Severidade por sexo
+   🖼️  PHQ9_AVA_6_violin_faixa_etaria.png     → Violin plots
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ RELATÓRIOS GERADOS ────────────────────────────────────────────────────────┐
+
+RELATÓRIO BÁSICO:
+   📕 resultados/pdf/relatorio_phq9_basico.pdf
+   🌐 resultados/html/relatorio_phq9_basico.html
+
+RELATÓRIO AVANÇADO:
+   📕 resultados/pdf/relatorio_phq9_avancado.pdf
+   🌐 resultados/html/relatorio_phq9_avancado.html
+
+COMO GERAR:
+   # Via scripts automatizados (RECOMENDADO):
+   source("scripts/relatorio_phq9_basico.R")
+   source("scripts/relatorio_phq9_avancado.R")
+
+   # Ou manualmente (HTML):
+   rmarkdown::render("relatorios/relatorio_phq9_basico.Rmd",
+                     output_format = "html_document")
+
+   # Ou manualmente (PDF):
+   rmarkdown::render("relatorios/relatorio_phq9_basico.Rmd",
+                     output_format = "pdf_document")
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ TESTES ESTATÍSTICOS ───────────────────────────────────────────────────────┐
+
+TESTE t (Comparar sexos):
+   t.test(escore_total ~ sexo, data = dados)
+
+CORRELAÇÃO (Idade vs escore):
+   cor.test(dados$idade, dados$escore_total)
+
+ALFA DE CRONBACH:
+   psych::alpha(dados %>% select(PHQ9_1:PHQ9_9))
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ INTERPRETAÇÃO RÁPIDA ──────────────────────────────────────────────────────┐
+
+CATEGORIAS DE SEVERIDADE:
+   0-4    → Mínima
+   5-9    → Leve
+   10-14  → Moderada
+   15-19  → Moderadamente Grave
+   20-27  → Grave
+
+ALFA DE CRONBACH:
+   ≥ 0.90   → Excelente
+   0.80-0.89 → Bom
+   0.70-0.79 → Aceitável
+   < 0.70    → Questionável
+
+TAMANHO DO EFEITO (d de Cohen):
+   < 0.2  → Trivial
+   0.2-0.5 → Pequeno
+   0.5-0.8 → Médio
+   > 0.8  → Grande
+
+CORRELAÇÃO (r de Pearson):
+   |r| < 0.3  → Fraca
+   0.3-0.7    → Moderada
+   > 0.7      → Forte
+
+SIGNIFICÂNCIA:
+   p < 0.05  → Significativo ✓
+   p ≥ 0.05  → Não significativo ✗
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ GRÁFICOS PERSONALIZADOS ───────────────────────────────────────────────────┐
+
+DENSIDADE:
+   ggplot(dados, aes(x = escore_total, fill = sexo)) +
+     geom_density(alpha = 0.5)
+
+DISPERSÃO:
+   ggplot(dados, aes(x = idade, y = escore_total, color = sexo)) +
+     geom_point() + geom_smooth(method = "lm")
+
+BARRAS:
+   ggplot(dados, aes(x = faixa_etaria, fill = severidade)) +
+     geom_bar(position = "fill")
+
+SALVAR:
+   ggsave("resultados/graficos/meu_grafico.png", 
+          width = 10, height = 6, dpi = 300)
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ VALIDAÇÃO DE DADOS ────────────────────────────────────────────────────────┐
+
+VERIFICAR ESTRUTURA:
+   glimpse(dados)
+
+VALORES ÚNICOS:
+   unique(dados$sexo)
+   unique(dados$PHQ9_1)
+
+VALORES FALTANTES:
+   sum(is.na(dados))
+   colSums(is.na(dados))
+
+RESUMO:
+   summary(dados)
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ ANÁLISE PRÉ-PÓS INTERVENÇÃO ───────────────────────────────────────────────┐
+
+CARREGAR DADOS:
+   # Com função avançada
+   pre <- analisar_phq9(dados_pre, prefixo_arquivo = "Pre")
+   pos <- analisar_phq9(dados_pos, prefixo_arquivo = "Pos")
+
+TESTE t PAREADO:
+   t.test(pre$escore_total, pos$escore_total, paired = TRUE)
+
+MUDANÇA INDIVIDUAL:
+   mudanca <- pos$escore_total - pre$escore_total
+   mean(mudanca)  # Média da mudança
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ EXPORTAR PARA OUTROS FORMATOS ─────────────────────────────────────────────┐
+
+EXCEL:
+   library(writexl)
+   write_xlsx(resultado, "dados.xlsx")
+
+SPSS:
+   library(haven)
+   write_sav(resultado, "dados.sav")
+
+STATA:
+   library(haven)
+   write_dta(resultado, "dados.dta")
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ SOLUÇÃO DE PROBLEMAS ──────────────────────────────────────────────────────┐
+
+ERRO: "não foi possível encontrar a função"
+   → install.packages("nome_do_pacote")
+
+ERRO: "objeto não encontrado"
+   → Execute: source("scripts/analise_phq9_basico.R")
+   → Ou: source("scripts/analise_phq9_avancado.R")
+
+ERRO: "LaTeX not found"
+   → tinytex::install_tinytex()
+
+ALTERNATIVA ao PDF:
+   → Use os scripts automatizados que geram HTML também
+   → source("scripts/relatorio_phq9_basico.R")
+
+ATUALIZAR PACOTES:
+   → update.packages(ask = FALSE)
+
+REINICIAR R:
+   → .rs.restartR()  # No RStudio
+   → Ctrl + Shift + F10
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ ATALHOS ÚTEIS RSTUDIO ─────────────────────────────────────────────────────┐
+
+Executar linha/seleção:      Ctrl + Enter  (Mac: Cmd + Enter)
+Executar todo o script:      Ctrl + Shift + Enter
+Comentar/Descomentar:        Ctrl + Shift + C
+Pipe %>%:                    Ctrl + Shift + M
+Assignment <-:               Alt + -
+Limpar console:              Ctrl + L
+Buscar em arquivos:          Ctrl + Shift + F
+Ir para função:              Ctrl + .
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ PACOTES NECESSÁRIOS ───────────────────────────────────────────────────────┐
+
+install.packages(c(
+  "tidyverse",     # Manipulação de dados
+  "psych",         # Análises psicométricas
+  "ggplot2",       # Gráficos
+  "knitr",         # Relatórios
+  "rmarkdown",     # Documentos dinâmicos
+  "kableExtra",    # Tabelas
+  "corrplot",      # Correlações
+  "here"           # Caminhos de arquivos
+))
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ RECURSOS ADICIONAIS ───────────────────────────────────────────────────────┐
+
+DOCUMENTAÇÃO:
+   📖 documentacao/guia_de_uso_avancado.txt → Manual completo
+   📖 README.md                             → Visão geral do projeto
+   📖 INICIO_RAPIDO.md                      → Guia de início rápido
+
+SCRIPTS:
+   💻 scripts/analise_phq9_basico.R         → Análise básica
+   💻 scripts/analise_phq9_avancado.R       → Análise avançada
+   💻 scripts/relatorio_phq9_basico.R       → Gera relatório básico
+   💻 scripts/relatorio_phq9_avancado.R     → Gera relatório avançado
+
+TEMPLATES:
+   📄 relatorios/relatorio_phq9_basico.Rmd  → Template básico
+   📄 relatorios/relatorio_phq9_avancado.Rmd → Template avançado
+
+CONFIGURAÇÃO:
+   🔧 00_configuracao_inicial.R             → Configuração do projeto
+
+HELP DO R:
+   ?analisar_phq9
+   ?t.test
+   ?cor.test
+   ?psych::alpha
+
+SITES:
+   🌐 https://www.phqscreeners.com/      → PHQ-9 oficial
+   🌐 https://www.tidyverse.org/         → Tidyverse
+   🌐 https://ggplot2.tidyverse.org/     → ggplot2
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ WORKFLOW RECOMENDADO ──────────────────────────────────────────────────────┐
+
+PRIMEIRA VEZ (configuração inicial):
+1. Execute: source("00_configuracao_inicial.R")
+   (Instala pacotes e cria estrutura de pastas)
+   ↓
+
+USO NORMAL - ANÁLISE BÁSICA:
+2. Preparar dados no formato correto
+   ↓
+3. Validar dados (verificar NAs, valores inválidos)
+   ↓
+4. Executar: source("scripts/analise_phq9_basico.R")
+   ↓
+5. Revisar outputs em resultados/csv/ e resultados/graficos/
+   ↓
+6. Gerar relatório: source("scripts/relatorio_phq9_basico.R")
+   ↓
+7. Revisar relatórios em resultados/pdf/ e resultados/html/
+
+USO AVANÇADO - COM FUNÇÃO REUTILIZÁVEL:
+2. Preparar dados no formato correto
+   ↓
+3. Carregar função: source("scripts/analise_phq9_avancado.R")
+   ↓
+4. Usar função: resultado <- analisar_phq9(meus_dados)
+   ↓
+5. Revisar outputs
+   ↓
+6. Gerar relatório: source("scripts/relatorio_phq9_avancado.R")
+   ↓
+7. Análises adicionais conforme necessário
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─ DICAS FINAIS ──────────────────────────────────────────────────────────────┐
+
+✓ Sempre faça backup dos dados originais
+✓ Documente suas análises (comentários no código)
+✓ Use nomes descritivos para arquivos
+✓ Verifique pressupostos estatísticos
+✓ Interprete no contexto clínico
+✓ Cite as referências apropriadas
+✓ Consulte um estatístico para análises complexas
+
+⚠️  Item 9 (pensamentos de morte) requer atenção especial!
+
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    INÍCIO RÁPIDO EM 4 COMANDOS                             ║
+║                                                                            ║
+║  BÁSICO:                                                                   ║
+║  1. source("scripts/analise_phq9_basico.R")                                ║
+║  2. source("scripts/relatorio_phq9_basico.R")                              ║
+║                                                                            ║
+║  AVANÇADO:                                                                 ║
+║  3. source("scripts/analise_phq9_avancado.R")                              ║
+║  4. resultado <- analisar_phq9(meus_dados)                                 ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+                            Versão 3.0 | Novembro 2025
+                        Imprima este guia para referência!

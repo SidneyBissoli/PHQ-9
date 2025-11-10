@@ -1,0 +1,1318 @@
+================================================================================
+                    GUIA DE USO - SISTEMA COMPLETO PHQ-9
+              Análises Básicas e Avançadas com Relatórios Automatizados
+================================================================================
+
+📚 VISÃO GERAL
+==============
+
+Este sistema de análise do PHQ-9 oferece DOIS NÍVEIS de análise:
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔵 ANÁLISE BÁSICA
+-----------------
+Script: scripts/analise_phq9_basico.R
+
+✓ Cálculo de escores totais e categorização
+✓ Estatísticas descritivas completas
+✓ Análise por sexo e faixas etárias
+✓ Alfa de Cronbach (confiabilidade)
+✓ 6 visualizações profissionais
+✓ 6 arquivos CSV organizados
+✓ Relatório automático (HTML + PDF)
+
+Tempo de execução: ~30 segundos
+Ideal para: Primeira análise, relatórios simples, uso clínico
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔴 ANÁLISE AVANÇADA
+-------------------
+Script: scripts/analise_phq9_avancado.R
+
+✓ Tudo da análise básica +
+✓ Função reutilizável analisar_phq9()
+✓ Análise item por item (detalhada)
+✓ Testes estatísticos bivariados (teste t)
+✓ Correlações (idade x escore, por sexo)
+✓ Top 3 sintomas mais prevalentes
+✓ Relatório executivo consolidado
+✓ 6 visualizações avançadas
+✓ 5 arquivos CSV especializados
+✓ Relatório automático (HTML + PDF)
+
+Tempo de execução: ~45 segundos
+Ideal para: Publicações científicas, análises comparativas, múltiplos estudos
+
+================================================================================
+
+🚀 INÍCIO RÁPIDO
+================
+
+PRIMEIRA VEZ - CONFIGURAÇÃO INICIAL:
+------------------------------------
+
+Execute UMA VEZ para configurar o projeto:
+
+source("00_configuracao_inicial.R")
+
+Isso vai:
+• Verificar versão do R
+• Instalar pacotes necessários automaticamente
+• Criar todas as pastas (resultados/csv, resultados/graficos, resultados/pdf, resultados/html)
+• Configurar locale pt_BR
+• Testar funcionalidade do sistema
+
+═══════════════════════════════════════════════════════════════════════════════
+
+USO NORMAL - ANÁLISE BÁSICA:
+-----------------------------
+
+1. EXECUTAR ANÁLISE:
+   
+   source("scripts/analise_phq9_basico.R")
+   
+   Isso vai:
+   • Gerar dados fictícios (ou use seus dados)
+   • Processar e analisar
+   • Criar 6 arquivos CSV em resultados/csv/
+   • Criar 6 gráficos PNG em resultados/graficos/
+   • Mostrar resultados no console
+
+2. GERAR RELATÓRIO:
+   
+   source("scripts/relatorio_phq9_basico.R")
+   
+   Isso vai:
+   • Gerar HTML em resultados/html/relatorio_phq9_basico.html
+   • Gerar PDF em resultados/pdf/relatorio_phq9_basico.pdf
+   • Limpar arquivos temporários automaticamente
+
+═══════════════════════════════════════════════════════════════════════════════
+
+USO AVANÇADO - COM FUNÇÃO REUTILIZÁVEL:
+----------------------------------------
+
+1. EXECUTAR ANÁLISE COM DADOS FICTÍCIOS:
+   
+   source("scripts/analise_phq9_avancado.R")
+
+2. OU USAR COM SEUS PRÓPRIOS DADOS:
+   
+   # Carregar o script (carrega a função)
+   source("scripts/analise_phq9_avancado.R")
+   
+   # Carregar seus dados
+   library(tidyverse)
+   meus_dados <- read_csv("dados/questionarios.csv")
+   
+   # Usar a função
+   resultado <- analisar_phq9(meus_dados)
+
+3. GERAR RELATÓRIO:
+   
+   source("scripts/relatorio_phq9_avancado.R")
+   
+   Isso vai:
+   • Gerar HTML em resultados/html/relatorio_phq9_avancado.html
+   • Gerar PDF em resultados/pdf/relatorio_phq9_avancado.pdf
+   • Limpar arquivos temporários automaticamente
+
+================================================================================
+
+📂 ESTRUTURA COMPLETA DO PROJETO
+=================================
+
+PHQ-9/
+├── 📄 00_configuracao_inicial.R         ← Execute PRIMEIRO (1 vez)
+├── 📄 README.md                          ← Documentação principal
+├── 📄 INICIO_RAPIDO.md                   ← Guia rápido
+├── 📄 ESTRUTURA_DO_PROJETO.txt           ← Estrutura detalhada
+├── 📄 CHANGELOG.md                       ← Histórico de mudanças
+├── 📄 CITACAO_E_LICENCA.md              ← Como citar
+│
+├── 📁 scripts/
+│   ├── analise_phq9_basico.R            ← Script análise básica
+│   ├── analise_phq9_avancado.R          ← Script análise avançada
+│   ├── relatorio_phq9_basico.R          ← Gera relatório básico
+│   ├── relatorio_phq9_avancado.R        ← Gera relatório avançado
+│   └── README.md                         ← Documentação scripts
+│
+├── 📁 relatorios/
+│   ├── relatorio_phq9_basico.Rmd        ← Template básico
+│   ├── relatorio_phq9_avancado.Rmd      ← Template avançado
+│   ├── README.md                         ← Documentação relatórios
+│   └── INICIO_RAPIDO.md                  ← Guia rápido relatórios
+│
+├── 📁 documentacao/
+│   ├── cheat_sheet.txt                   ← Referência rápida
+│   └── guia_de_uso_avancado.txt         ← Este arquivo
+│
+├── 📁 dados/
+│   ├── Exemplo_dados_phq9.csv           ← Dados exemplo
+│   └── README.md                         ← Documentação dados
+│
+└── 📁 resultados/
+    ├── csv/                              ← Tabelas exportadas
+    ├── graficos/                         ← Gráficos PNG
+    ├── pdf/                              ← Relatórios PDF
+    │   ├── relatorio_phq9_basico.pdf
+    │   └── relatorio_phq9_avancado.pdf
+    ├── html/                             ← Relatórios HTML
+    │   ├── relatorio_phq9_basico.html
+    │   └── relatorio_phq9_avancado.html
+    └── README.md                         ← Documentação resultados
+
+================================================================================
+
+📊 ARQUIVOS GERADOS - ANÁLISE BÁSICA
+=====================================
+
+LOCALIZAÇÃO: resultados/csv/
+
+1. PHQ9_BAS_dados_processados.csv
+   • Dataset completo com escores calculados
+   • Colunas: id, idade, sexo, PHQ9_1 a PHQ9_9, escore_total, 
+     severidade, faixa_etaria
+
+2. PHQ9_BAS_estatisticas_descritivas.csv
+   • Estatísticas gerais da amostra
+   • Média, DP, mínimo, máximo, mediana
+
+3. PHQ9_BAS_distribuicao_severidade.csv
+   • Contagem e porcentagem de cada categoria
+   • Mínima, Leve, Moderada, Moderadamente Grave, Grave
+
+4. PHQ9_BAS_analise_sexo.csv
+   • Comparação entre Masculino e Feminino
+   • Média, DP, N por sexo
+
+5. PHQ9_BAS_faixas_etarias.csv
+   • Estatísticas por faixa etária
+   • 18-24, 25-34, 35-49, 50-64, 65+ anos
+
+6. PHQ9_BAS_confiabilidade.csv
+   • Alfa de Cronbach e interpretação
+   • Medida de consistência interna
+
+═══════════════════════════════════════════════════════════════════════════════
+
+GRÁFICOS (PNG, 300 DPI)
+LOCALIZAÇÃO: resultados/graficos/
+
+1. PHQ9_BAS_1_distribuicao_escores.png
+   → Histograma da distribuição de escores totais
+
+2. PHQ9_BAS_2_severidade_barras.png
+   → Gráfico de barras das categorias de severidade
+
+3. PHQ9_BAS_3_comparacao_sexos.png
+   → Boxplot comparando Masculino vs Feminino
+
+4. PHQ9_BAS_4_idade_dispersao.png
+   → Gráfico de dispersão: idade vs escore total
+
+5. PHQ9_BAS_5_faixas_etarias.png
+   → Violin plot por faixa etária
+
+6. PHQ9_BAS_6_heatmap_itens.png
+   → Heatmap de correlações entre os 9 itens
+
+================================================================================
+
+📈 ARQUIVOS GERADOS - ANÁLISE AVANÇADA
+=======================================
+
+LOCALIZAÇÃO: resultados/csv/
+
+1. PHQ9_analise_dados_processados.csv
+   • Dataset completo processado
+   • Todas as variáveis calculadas
+
+2. PHQ9_analise_itens_detalhada.csv
+   • Estatísticas de cada item individual (PHQ9_1 a PHQ9_9)
+   • Média, DP, mediana, % de cada resposta (0, 1, 2, 3)
+   • Ordenado por prevalência (média decrescente)
+   • Identifica top 3 sintomas mais comuns
+
+3. PHQ9_analise_bivariada.csv
+   • Resultados de testes estatísticos:
+     - Teste t (comparação entre sexos)
+     - Correlações (idade x escore, por sexo e geral)
+   • Inclui valores p, IC 95%, tamanho do efeito
+
+4. PHQ9_confiabilidade.csv
+   • Alfa de Cronbach e métricas relacionadas
+   • Interpretação automática da confiabilidade
+
+5. PHQ9_relatorio_executivo.csv
+   • Resumo consolidado de todos os achados principais
+   • Formato pronto para apresentação
+   • Inclui interpretações em texto
+
+═══════════════════════════════════════════════════════════════════════════════
+
+GRÁFICOS (PNG, 300 DPI)
+LOCALIZAÇÃO: resultados/graficos/
+
+1. PHQ9_AVA_1_analise_itens.png
+   → Média de cada item com barras de erro (IC 95%)
+   → Identifica visualmente os sintomas mais prevalentes
+
+2. PHQ9_AVA_2_comparacao_sexos.png
+   → Boxplot comparando Masculino vs Feminino
+   → Inclui resultado do teste t no gráfico
+
+3. PHQ9_AVA_3_idade_escore_dispersao.png
+   → Gráfico de dispersão: idade vs escore
+   → Linhas de regressão separadas por sexo
+   → Inclui coeficiente de correlação
+
+4. PHQ9_AVA_4_heatmap_respostas.png
+   → Padrão de respostas dos primeiros 30 respondentes
+   → Visualização por cores (0=verde, 3=vermelho)
+
+5. PHQ9_AVA_5_severidade_sexo_prop.png
+   → Distribuição proporcional de categorias por sexo
+   → Gráfico de barras empilhadas 100%
+
+6. PHQ9_AVA_6_violin_faixa_etaria.png
+   → Violin plots por faixa etária
+   → Com quartis e médias sobrepostos
+
+================================================================================
+
+🔧 USANDO A FUNÇÃO analisar_phq9() (APENAS NA ANÁLISE AVANÇADA)
+================================================================
+
+A função reutilizável permite analisar seus próprios dados facilmente.
+
+SINTAXE COMPLETA:
+-----------------
+
+resultado <- analisar_phq9(
+  dados,                          # Seu dataframe (OBRIGATÓRIO)
+  gerar_graficos = TRUE,          # Criar gráficos? (padrão: TRUE)
+  salvar_resultados = TRUE,       # Salvar CSVs? (padrão: TRUE)
+  prefixo_arquivo = "PHQ9"        # Prefixo dos arquivos (padrão: "PHQ9")
+)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+EXEMPLO 1: USO BÁSICO
+----------------------
+
+# Carregar o script (carrega a função)
+source("scripts/analise_phq9_avancado.R")
+
+# Carregar seus dados
+library(tidyverse)
+meus_dados <- read_csv("dados/questionarios_phq9.csv")
+
+# Analisar
+resultado <- analisar_phq9(meus_dados)
+
+# Resultado já inclui escores e categorias
+head(resultado)
+View(resultado)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+EXEMPLO 2: SEM SALVAR ARQUIVOS
+-------------------------------
+
+# Apenas processar, sem gerar arquivos CSV ou gráficos
+resultado <- analisar_phq9(
+  meus_dados,
+  gerar_graficos = FALSE,
+  salvar_resultados = FALSE
+)
+
+# Útil para análises exploratórias rápidas
+summary(resultado$escore_total)
+table(resultado$severidade)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+EXEMPLO 3: COM PREFIXO PERSONALIZADO
+-------------------------------------
+
+# Usar prefixo diferente para organizar arquivos de múltiplos estudos
+resultado <- analisar_phq9(
+  meus_dados,
+  prefixo_arquivo = "Estudo_2025_Grupo_Controle"
+)
+
+# Vai gerar arquivos como:
+# - Estudo_2025_Grupo_Controle_dados_processados.csv
+# - Estudo_2025_Grupo_Controle_analise_itens_detalhada.csv
+# - etc.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+EXEMPLO 4: MÚLTIPLOS ESTUDOS EM SEQUÊNCIA
+------------------------------------------
+
+# Carregar a função uma vez
+source("scripts/analise_phq9_avancado.R")
+
+# Processar vários datasets
+dados_pre <- read_csv("dados/pre_intervencao.csv")
+dados_pos <- read_csv("dados/pos_intervencao.csv")
+dados_controle <- read_csv("dados/grupo_controle.csv")
+
+# Analisar cada um com prefixos diferentes
+res_pre <- analisar_phq9(dados_pre, prefixo_arquivo = "Pre")
+res_pos <- analisar_phq9(dados_pos, prefixo_arquivo = "Pos")
+res_controle <- analisar_phq9(dados_controle, prefixo_arquivo = "Controle")
+
+# Comparar resultados
+mean(res_pre$escore_total)
+mean(res_pos$escore_total)
+mean(res_controle$escore_total)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+REQUISITOS DO DATAFRAME:
+-------------------------
+
+Seu dataframe DEVE conter as seguintes colunas:
+
+• PHQ9_1 até PHQ9_9  → Respostas aos 9 itens (valores 0, 1, 2 ou 3)
+• idade              → Idade numérica (ex: 25, 42, 67)
+• sexo               → "M" ou "F" (Masculino ou Feminino)
+
+ESTRUTURA MÍNIMA:
+
+  id  idade sexo PHQ9_1 PHQ9_2 PHQ9_3 PHQ9_4 PHQ9_5 PHQ9_6 PHQ9_7 PHQ9_8 PHQ9_9
+  1   25    F    0      1      2      1      0      0      1      0      0
+  2   42    M    1      0      0      0      1      1      0      0      0
+  3   67    F    2      2      3      2      1      2      2      1      1
+
+FORMATO CSV RECOMENDADO:
+
+id,idade,sexo,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9
+1,25,F,0,1,2,1,0,0,1,0,0
+2,42,M,1,0,0,0,1,1,0,0,0
+3,35,F,2,2,3,2,1,2,2,1,1
+
+================================================================================
+
+📈 ENTENDENDO OS RESULTADOS
+============================
+
+1. ANÁLISE DE ITENS INDIVIDUAIS (Avançada)
+-------------------------------------------
+
+Mostra qual sintoma é mais prevalente na amostra:
+
+• Ordenado por média decrescente (do maior para o menor)
+• Média alta = sintoma mais comum na amostra
+• % Zero = proporção de pessoas que não relataram o sintoma
+• % Três = proporção que relatou "quase todos os dias"
+
+INTERPRETAÇÃO PRÁTICA:
+→ Item com maior média: sintoma que precisa de mais atenção clínica
+→ Itens no top 3: focos prioritários para intervenção
+→ Compare com dados normativos da literatura
+
+EXEMPLO:
+Se PHQ9_2 (humor deprimido) tem média 1.8:
+→ Média indica que a maioria responde entre "vários dias" e "mais da metade dos dias"
+→ Sintoma altamente prevalente nesta amostra
+
+═══════════════════════════════════════════════════════════════════════════════
+
+2. TESTE t (COMPARAÇÃO ENTRE SEXOS)
+------------------------------------
+
+Verifica se homens e mulheres diferem significativamente nos escores:
+
+• p < 0.05 → Diferença estatisticamente significativa
+• p ≥ 0.05 → Não há evidência de diferença significativa
+• d de Cohen → Magnitude do efeito (importância prática):
+  - < 0.2: efeito trivial/negligenciável
+  - 0.2-0.5: efeito pequeno
+  - 0.5-0.8: efeito médio
+  - > 0.8: efeito grande
+
+EXEMPLO DE INTERPRETAÇÃO:
+t(98) = 2.45, p = 0.016, d = 0.49
+
+→ Mulheres apresentam escores significativamente maiores que homens (p < 0.05)
+→ Tamanho do efeito pequeno (d = 0.49)
+→ A diferença é estatisticamente significativa, mas de magnitude moderada
+→ Considere relevância clínica além da significância estatística
+
+═══════════════════════════════════════════════════════════════════════════════
+
+3. CORRELAÇÃO (IDADE vs ESCORE)
+--------------------------------
+
+Verifica se idade está relacionada aos sintomas depressivos:
+
+DIREÇÃO:
+• r próximo de 0 → Sem relação linear
+• r positivo (+) → Escores aumentam com a idade
+• r negativo (-) → Escores diminuem com a idade
+
+INTENSIDADE:
+• |r| < 0.3: correlação fraca
+• |r| 0.3-0.7: correlação moderada
+• |r| > 0.7: correlação forte
+
+SIGNIFICÂNCIA:
+• p < 0.05 → Correlação estatisticamente significativa
+• p ≥ 0.05 → Correlação não significativa (pode ser devido ao acaso)
+
+EXEMPLO DE INTERPRETAÇÃO:
+r = 0.15, p = 0.143
+
+→ Correlação fraca e positiva (r = 0.15)
+→ Não significativa estatisticamente (p > 0.05)
+→ Idade não está consistentemente relacionada aos sintomas nesta amostra
+→ Pode haver relação não-linear ou efeito confundidor
+
+OUTRO EXEMPLO:
+r = -0.42, p = 0.002
+
+→ Correlação moderada e negativa (r = -0.42)
+→ Estatisticamente significativa (p < 0.01)
+→ Pessoas mais velhas tendem a ter escores menores
+→ Magnitude moderada - relação clinicamente relevante
+
+═══════════════════════════════════════════════════════════════════════════════
+
+4. ALFA DE CRONBACH (CONFIABILIDADE)
+-------------------------------------
+
+Mede consistência interna - o quanto os 9 itens medem o mesmo construto:
+
+INTERPRETAÇÃO:
+• ≥ 0.90: Excelente (ideal para decisões individuais)
+• 0.80-0.89: Bom (adequado para pesquisa e prática clínica)
+• 0.70-0.79: Aceitável (adequado para pesquisa)
+• 0.60-0.69: Questionável (revisar itens)
+• < 0.60: Inaceitável (não usar)
+
+CONTEXTO DO PHQ-9:
+• Estudos mostram α geralmente > 0.80
+• Valores muito altos (> 0.95) podem indicar redundância
+• Valores baixos podem indicar heterogeneidade da amostra ou tradução problemática
+
+EXEMPLO:
+α = 0.87
+
+→ Boa consistência interna
+→ Os 9 itens estão medindo de forma coerente o construto de depressão
+→ Adequado para uso em pesquisa e prática clínica
+
+═══════════════════════════════════════════════════════════════════════════════
+
+5. CATEGORIAS DE SEVERIDADE
+----------------------------
+
+Baseadas nos pontos de corte validados internacionalmente:
+
+Mínima (0-4):
+→ Sintomas mínimos ou ausentes
+→ Recomendação: Monitoramento
+→ Não indica necessidade de tratamento
+
+Leve (5-9):
+→ Sintomas leves de depressão
+→ Recomendação: Acompanhamento, psicoeducação, vigilância
+→ Considerar intervenções preventivas
+
+Moderada (10-14):
+→ Sintomas moderados
+→ Recomendação: Considerar tratamento (psicoterapia)
+→ Avaliar fatores psicossociais
+→ Monitoramento regular
+
+Moderadamente Grave (15-19):
+→ Sintomas graves
+→ Recomendação: Tratamento recomendado
+→ Psicoterapia + considerar farmacoterapia
+→ Avaliação clínica completa necessária
+
+Grave (20-27):
+→ Sintomas muito graves
+→ Recomendação: Tratamento urgente
+→ Psicoterapia + farmacoterapia
+→ Considerar avaliação de risco e hospitalização se necessário
+
+⚠️ ATENÇÃO ESPECIAL:
+Item 9 (pensamentos de morte/autolesão) com pontuação ≥ 1
+requer avaliação IMEDIATA de risco suicida, independentemente do escore total!
+
+================================================================================
+
+📄 GERANDO RELATÓRIOS
+======================
+
+O sistema oferece duas formas de gerar relatórios:
+
+MÉTODO 1: SCRIPTS AUTOMATIZADOS (RECOMENDADO)
+----------------------------------------------
+
+Os scripts automatizados geram AMBOS os formatos (HTML e PDF) automaticamente
+e salvam nos diretórios corretos.
+
+# Relatório Básico
+source("scripts/relatorio_phq9_basico.R")
+# Gera: resultados/html/relatorio_phq9_basico.html
+#       resultados/pdf/relatorio_phq9_basico.pdf
+
+# Relatório Avançado
+source("scripts/relatorio_phq9_avancado.R")
+# Gera: resultados/html/relatorio_phq9_avancado.html
+#       resultados/pdf/relatorio_phq9_avancado.pdf
+
+VANTAGENS:
+✓ Gera HTML e PDF automaticamente
+✓ Salva nos diretórios corretos
+✓ Verifica se arquivos necessários existem
+✓ Limpa arquivos temporários
+✓ Detecta se LaTeX está instalado
+✓ Mostra progresso e tamanho dos arquivos
+
+═══════════════════════════════════════════════════════════════════════════════
+
+MÉTODO 2: MANUAL (Via RStudio ou Console)
+------------------------------------------
+
+# Apenas HTML
+rmarkdown::render("relatorios/relatorio_phq9_basico.Rmd",
+                  output_format = "html_document")
+
+# Apenas PDF (requer LaTeX)
+rmarkdown::render("relatorios/relatorio_phq9_basico.Rmd",
+                  output_format = "pdf_document")
+
+# Especificar diretório de saída
+rmarkdown::render("relatorios/relatorio_phq9_basico.Rmd",
+                  output_format = "html_document",
+                  output_dir = "resultados/html")
+
+═══════════════════════════════════════════════════════════════════════════════
+
+REQUISITOS PARA GERAÇÃO DE PDF:
+--------------------------------
+
+Para gerar PDF, você precisa ter LaTeX instalado.
+
+OPÇÃO MAIS FÁCIL - TinyTeX (RECOMENDADO):
+
+# Instalar pacote R
+install.packages("tinytex")
+
+# Instalar TinyTeX (LaTeX leve)
+tinytex::install_tinytex()
+
+# Agora pode gerar PDFs normalmente
+source("scripts/relatorio_phq9_basico.R")
+
+═══════════════════════════════════════════════════════════════════════════════
+
+OUTRAS OPÇÕES (mais pesadas):
+
+Windows:
+• MiKTeX: https://miktex.org/download
+• Tamanho: ~200 MB
+
+Mac:
+• MacTeX: https://www.tug.org/mactex/
+• Tamanho: ~4 GB
+
+Linux (Ubuntu/Debian):
+• sudo apt-get install texlive-full
+• Tamanho: ~5 GB
+
+═══════════════════════════════════════════════════════════════════════════════
+
+ALTERNATIVA SEM LaTeX:
+----------------------
+
+Se não quiser instalar LaTeX, use apenas HTML:
+
+source("scripts/relatorio_phq9_basico.R")
+
+O script detecta automaticamente se LaTeX está instalado:
+• Se sim: gera HTML + PDF
+• Se não: gera apenas HTML e avisa
+
+HTML pode ser:
+• Aberto em qualquer navegador
+• Impresso como PDF pelo navegador (Ctrl+P → Salvar como PDF)
+• Compartilhado facilmente
+• Visualizado em qualquer dispositivo
+
+═══════════════════════════════════════════════════════════════════════════════
+
+SOLUÇÃO DE PROBLEMAS:
+---------------------
+
+Erro: "LaTeX not found"
+→ Instale tinytex: tinytex::install_tinytex()
+
+Erro: "pandoc not found"
+→ Instale pandoc: https://pandoc.org/installing.html
+→ Ou use RStudio (já inclui pandoc)
+
+Erro: "Cannot find file"
+→ Verifique que você está no diretório raiz do projeto (PHQ-9/)
+→ Use: getwd() para verificar
+→ Use: setwd("caminho/para/PHQ-9") para corrigir
+
+Erro: "Missing packages"
+→ Execute: source("00_configuracao_inicial.R")
+
+================================================================================
+
+🎨 PERSONALIZANDO AS ANÁLISES
+==============================
+
+1. ALTERAR TAMANHO DA AMOSTRA (DADOS FICTÍCIOS)
+------------------------------------------------
+
+No script analise_phq9_basico.R ou analise_phq9_avancado.R:
+
+Procure a linha (geralmente ~linha 140-150):
+
+# Original:
+n_respondentes <- 100
+
+# Modificado (exemplo):
+n_respondentes <- 500
+
+Isso gerará 500 respondentes fictícios ao invés de 100.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+2. MODIFICAR PONTOS DE CORTE DE SEVERIDADE
+-------------------------------------------
+
+Na seção de processamento dos scripts:
+
+severidade = case_when(
+  escore_total >= 0  & escore_total <= 4  ~ "Mínima",
+  escore_total >= 5  & escore_total <= 9  ~ "Leve",
+  escore_total >= 10 & escore_total <= 14 ~ "Moderada",
+  escore_total >= 15 & escore_total <= 19 ~ "Moderadamente Grave",
+  escore_total >= 20 & escore_total <= 27 ~ "Grave",
+  TRUE ~ "Outro"
+)
+
+Modifique os valores numéricos conforme necessário.
+NOTA: Pontos de corte atuais são baseados em evidências científicas.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+3. ALTERAR FAIXAS ETÁRIAS
+--------------------------
+
+Na seção de processamento dos scripts:
+
+faixa_etaria = case_when(
+  idade >= 18 & idade < 25 ~ "18-24 anos",
+  idade >= 25 & idade < 35 ~ "25-34 anos",
+  idade >= 35 & idade < 50 ~ "35-49 anos",
+  idade >= 50 & idade < 65 ~ "50-64 anos",
+  idade >= 65             ~ "65+ anos",
+  TRUE ~ "Outro"
+)
+
+Ajuste as idades e rótulos conforme sua população.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+4. PERSONALIZAR CORES DOS GRÁFICOS
+-----------------------------------
+
+Procure por scale_fill_manual() ou scale_color_manual() nos scripts:
+
+# Esquema de cores atual (análise básica)
+cores_severidade <- c(
+  "Mínima" = "#2ecc71",           # Verde
+  "Leve" = "#f39c12",             # Laranja claro
+  "Moderada" = "#e67e22",         # Laranja
+  "Moderadamente Grave" = "#e74c3c",  # Vermelho claro
+  "Grave" = "#c0392b"             # Vermelho escuro
+)
+
+Modifique os códigos hexadecimais para suas cores preferidas.
+Use: https://htmlcolorcodes.com/ para escolher cores.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+5. AJUSTAR RESOLUÇÃO DOS GRÁFICOS
+----------------------------------
+
+Procure por ggsave() nos scripts:
+
+ggsave(
+  filename = "arquivo.png",
+  plot = grafico,
+  path = "resultados/graficos",
+  width = 12,      # Largura em polegadas (aumentar para mais detalhes)
+  height = 8,      # Altura em polegadas
+  dpi = 300,       # Resolução: 300 = padrão, 600 = alta, 150 = rápida
+  bg = "white"     # Fundo branco
+)
+
+RECOMENDAÇÕES:
+• Apresentação: dpi = 300, width = 10-12
+• Publicação: dpi = 600, width = 8-10
+• Web: dpi = 150, width = 8
+• Poster: dpi = 300-600, width = 14-20
+
+================================================================================
+
+💾 USANDO COM DADOS REAIS
+==========================
+
+PASSO A PASSO COMPLETO:
+-----------------------
+
+PASSO 1: PREPARAR SEUS DADOS
+-----------------------------
+
+Seu arquivo CSV deve ter a estrutura correta:
+
+FORMATO OBRIGATÓRIO:
+
+id,idade,sexo,PHQ9_1,PHQ9_2,PHQ9_3,PHQ9_4,PHQ9_5,PHQ9_6,PHQ9_7,PHQ9_8,PHQ9_9
+1,25,F,0,1,2,1,0,0,1,0,0
+2,42,M,1,0,0,0,1,1,0,0,0
+3,35,F,2,2,3,2,1,2,2,1,1
+
+IMPORTANTE:
+• Respostas PHQ9 devem ser 0, 1, 2 ou 3
+• Sexo deve ser "M" ou "F"
+• Idade deve ser numérica
+• Sem valores faltantes (NA) nos itens PHQ9
+• Encoding UTF-8 (padrão) ou Latin1
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PASSO 2: VALIDAR SEUS DADOS
+----------------------------
+
+Antes de processar, sempre valide:
+
+# Carregar dados
+library(tidyverse)
+meus_dados <- read_csv("dados/meus_questionarios.csv")
+
+# Verificar estrutura
+glimpse(meus_dados)
+
+# Verificar valores únicos
+unique(meus_dados$sexo)        # Deve retornar apenas "M" e "F"
+unique(meus_dados$PHQ9_1)      # Deve retornar apenas 0, 1, 2, 3
+
+# Verificar valores faltantes
+colSums(is.na(meus_dados))     # Idealmente todos zero
+
+# Verificar range de idades
+range(meus_dados$idade)        # Devem ser idades realistas (18-100)
+
+# Resumo geral
+summary(meus_dados)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PASSO 3: ESCOLHER TIPO DE ANÁLISE
+----------------------------------
+
+OPÇÃO A - ANÁLISE BÁSICA:
+
+source("scripts/analise_phq9_basico.R")
+
+Depois, edite a linha de leitura de dados no script:
+# Substitua:
+dados <- gerar_dados_ficticios(n_respondentes = 100)
+
+# Por:
+dados <- read_csv("dados/meus_questionarios.csv")
+
+Execute novamente:
+source("scripts/analise_phq9_basico.R")
+
+═══════════════════════════════════════════════════════════════════════════════
+
+OPÇÃO B - ANÁLISE AVANÇADA (COM FUNÇÃO):
+
+# 1. Carregar o script (carrega a função)
+source("scripts/analise_phq9_avancado.R")
+
+# 2. Carregar seus dados
+library(tidyverse)
+meus_dados <- read_csv("dados/meus_questionarios.csv")
+
+# 3. Processar com a função
+resultado <- analisar_phq9(meus_dados)
+
+# 4. Explorar resultados
+head(resultado)
+summary(resultado$escore_total)
+table(resultado$severidade)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PASSO 4: EXECUTAR ANÁLISES ADICIONAIS
+--------------------------------------
+
+Com os dados processados, você pode fazer análises extras:
+
+# Teste t (comparação entre sexos)
+teste_sexo <- t.test(escore_total ~ sexo, data = resultado)
+print(teste_sexo)
+
+# Correlação (idade vs escore)
+cor_idade <- cor.test(resultado$idade, resultado$escore_total)
+print(cor_idade)
+
+# Alfa de Cronbach
+library(psych)
+itens <- resultado %>% select(PHQ9_1:PHQ9_9)
+alpha_result <- psych::alpha(itens)
+print(alpha_result)
+
+# Estatísticas por grupo
+resultado %>%
+  group_by(sexo) %>%
+  summarise(
+    n = n(),
+    media = mean(escore_total),
+    dp = sd(escore_total),
+    mediana = median(escore_total)
+  )
+
+# Criar gráfico personalizado
+ggplot(resultado, aes(x = idade, y = escore_total, color = sexo)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal() +
+  labs(
+    title = "Relação entre Idade e Escore PHQ-9",
+    x = "Idade (anos)",
+    y = "Escore Total PHQ-9",
+    color = "Sexo"
+  )
+
+ggsave("resultados/graficos/meu_grafico_idade.png",
+       width = 10, height = 6, dpi = 300)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PASSO 5: GERAR RELATÓRIO
+-------------------------
+
+# Básico
+source("scripts/relatorio_phq9_basico.R")
+
+# Avançado
+source("scripts/relatorio_phq9_avancado.R")
+
+Os relatórios serão salvos automaticamente em:
+• resultados/html/
+• resultados/pdf/
+
+================================================================================
+
+🔬 INTERPRETAÇÃO CLÍNICA
+=========================
+
+PONTOS DE ATENÇÃO CRÍTICOS:
+---------------------------
+
+1. ⚠️ ITEM 9 (Pensamentos de morte/autolesão)
+   
+   REGRA DE OURO:
+   Qualquer pontuação > 0 requer avaliação imediata de risco suicida
+   
+   → Não esperar o escore total
+   → Avaliar intenção, plano, meios
+   → Considerar fatores de risco e proteção
+   → Documentar avaliação detalhadamente
+   → Estabelecer plano de segurança
+   → Encaminhar quando necessário
+
+2. 🔴 ESCORES ≥ 10 (Moderada ou superior)
+   
+   → Sugerem necessidade de avaliação clínica completa
+   → Considerar encaminhamento para profissional de saúde mental
+   → Avaliar fatores psicossociais contributivos
+   → Descartar causas médicas (hipotireoidismo, anemia, etc.)
+
+3. 🔴 ESCORES ≥ 15 (Moderadamente Grave ou Grave)
+   
+   → Indicam necessidade de tratamento
+   → Avaliação urgente recomendada
+   → Considerar medicação + psicoterapia
+   → Avaliar funcionalidade (trabalho, família, social)
+   → Monitoramento regular essencial
+
+4. 📊 MUDANÇAS NO ESCORE (Pré-Pós Tratamento)
+   
+   Mudança Clinicamente Significativa:
+   → Redução de 5+ pontos = melhora clinicamente significativa
+   → Útil para monitorar progresso do tratamento
+   → Não confundir significância clínica com estatística
+   
+   Remissão:
+   → Escore < 5 ao final do tratamento
+   → Meta ideal: escore 0-4 (Mínima)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+LIMITAÇÕES DO PHQ-9:
+--------------------
+
+⚠️ O PHQ-9 é um instrumento de TRIAGEM, NÃO de diagnóstico
+
+• NÃO substitui avaliação clínica completa
+• NÃO avalia todos os critérios diagnósticos do DSM-5
+• NÃO distingue tipos de depressão (unipolar, bipolar, etc.)
+• Pode ter viés de resposta (desejabilidade social)
+• Pode ser influenciado por condições médicas
+• Deve considerar contexto cultural e socioeconômico
+• NÃO avalia risco suicida de forma abrangente (apenas Item 9)
+• Pode ter limitações em populações específicas
+
+PONTOS FORTES:
+• Validado internacionalmente
+• Rápido e fácil de aplicar (2-3 minutos)
+• Gratuito e de domínio público
+• Útil para rastreamento populacional
+• Sensível a mudanças ao longo do tempo
+• Boa consistência interna (α > 0.80)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+USO ÉTICO E RESPONSÁVEL:
+-------------------------
+
+✓ SEMPRE FAZER:
+
+• Obter consentimento informado
+• Explicar propósito e limitações do instrumento
+• Garantir confidencialidade dos dados
+• Fornecer feedback apropriado aos respondentes
+• Encaminhar quando necessário
+• Usar como parte de avaliação mais ampla
+• Considerar contexto clínico e psicossocial
+• Documentar adequadamente
+• Respeitar autonomia do paciente
+
+✗ NUNCA FAZER:
+
+• Usar como única base para diagnóstico
+• Ignorar pontuação no Item 9
+• Aplicar sem treinamento adequado
+• Deixar de encaminhar casos graves
+• Usar para decisões administrativas (demissão, etc.)
+• Compartilhar resultados sem autorização
+• Aplicar em situação coercitiva
+• Usar fora do contexto apropriado
+
+═══════════════════════════════════════════════════════════════════════════════
+
+QUANDO ENCAMINHAR PARA AVALIAÇÃO ESPECIALIZADA:
+------------------------------------------------
+
+URGENTE (imediato):
+• Item 9 ≥ 1 com ideação suicida ativa
+• Risco iminente de autolesão
+• Sintomas psicóticos
+• Agitação extrema ou comportamento desorganizado
+
+PRIORITÁRIO (dentro de 1 semana):
+• Escore total ≥ 20 (Grave)
+• Escore 15-19 com prejuízo funcional significativo
+• Sintomas rapidamente progressivos
+
+ROTINEIRO (dentro de 1 mês):
+• Escore total 10-14 (Moderada)
+• Sintomas persistentes por > 2 semanas
+• Impacto em funcionalidade
+• Pedido do paciente
+
+ACOMPANHAMENTO:
+• Escore 5-9 (Leve) com fatores de risco
+• Histórico de depressão
+• Múltiplos estressores psicossociais
+
+================================================================================
+
+📚 REFERÊNCIAS E RECURSOS
+==========================
+
+ARTIGOS FUNDAMENTAIS:
+---------------------
+
+1. Kroenke, K., Spitzer, R. L., & Williams, J. B. (2001). 
+   The PHQ-9: Validity of a brief depression severity measure.
+   Journal of General Internal Medicine, 16(9), 606-613.
+   DOI: 10.1046/j.1525-1497.2001.016009606.x
+   
+   → Artigo original de validação do PHQ-9
+
+2. Manea, L., Gilbody, S., & McMillan, D. (2012). 
+   Optimal cut-off score for diagnosing depression with the Patient Health 
+   Questionnaire (PHQ-9): a meta-analysis.
+   CMAJ, 184(3), E191-E196.
+   DOI: 10.1503/cmaj.110829
+   
+   → Meta-análise sobre pontos de corte
+
+3. Levis, B., et al. (2019). 
+   Accuracy of Patient Health Questionnaire-9 (PHQ-9) for screening to detect 
+   major depression: individual participant data meta-analysis.
+   BMJ, 365, l1476.
+   DOI: 10.1136/bmj.l1476
+   
+   → Meta-análise individual de acurácia diagnóstica
+
+4. Santos, I. S., et al. (2013).
+   Sensibilidade e especificidade do Patient Health Questionnaire-9 (PHQ-9) 
+   entre adultos da população geral.
+   Cadernos de Saúde Pública, 29(8), 1533-1543.
+   
+   → Validação brasileira do PHQ-9
+
+═══════════════════════════════════════════════════════════════════════════════
+
+RECURSOS ONLINE:
+----------------
+
+SITE OFICIAL DO PHQ-9:
+🌐 https://www.phqscreeners.com/
+   • Versões em múltiplos idiomas
+   • Manuais de instrução
+   • Artigos de validação
+   • Uso gratuito para fins clínicos e de pesquisa
+
+BASES DE DADOS CIENTÍFICAS:
+🌐 PubMed: https://pubmed.ncbi.nlm.nih.gov/
+   Buscar: "PHQ-9" OR "Patient Health Questionnaire"
+   
+🌐 Google Scholar: https://scholar.google.com/
+   Buscar estudos de validação em sua população específica
+
+DIRETRIZES CLÍNICAS:
+🌐 NICE Guidelines (UK): https://www.nice.org.uk/
+   • Orientações sobre manejo de depressão
+   
+🌐 APA Guidelines: https://www.apa.org/
+   • American Psychiatric Association
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PACOTES R ÚTEIS:
+----------------
+
+install.packages(c(
+  "tidyverse",     # Manipulação e visualização de dados
+  "psych",         # Análises psicométricas (alfa de Cronbach)
+  "ggplot2",       # Visualizações avançadas
+  "rmarkdown",     # Relatórios dinâmicos
+  "knitr",         # Tabelas formatadas
+  "kableExtra",    # Tabelas elegantes
+  "corrplot",      # Matrizes de correlação
+  "here",          # Gerenciamento de caminhos
+  "readr",         # Leitura de dados
+  "dplyr",         # Manipulação de dados
+  "haven",         # Import/export SPSS, Stata
+  "writexl"        # Export para Excel
+))
+
+DOCUMENTAÇÃO DOS PACOTES:
+?tidyverse
+?psych::alpha
+?ggplot2
+?rmarkdown
+
+TUTORIAIS ONLINE:
+🌐 R for Data Science: https://r4ds.had.co.nz/
+🌐 ggplot2 Documentation: https://ggplot2.tidyverse.org/
+🌐 RMarkdown Guide: https://rmarkdown.rstudio.com/
+
+================================================================================
+
+❓ PERGUNTAS FREQUENTES (FAQ)
+==============================
+
+P: Posso usar este código para pesquisa científica?
+R: Sim! O código é livre para uso acadêmico, clínico e de pesquisa.
+   Lembre-se de citar as referências apropriadas do PHQ-9 e dos
+   métodos estatísticos utilizados.
+
+P: O código funciona com outras línguas além do português?
+R: Sim! A lógica de análise é universal. Basta alterar os textos
+   nos gráficos, relatórios e categorias. Os cálculos estatísticos
+   são independentes de idioma.
+
+P: Posso modificar o código?
+R: Sim, o código é totalmente personalizável e está bem comentado
+   para facilitar modificações. Sugerimos manter uma cópia do
+   original antes de fazer alterações.
+
+P: E se minha amostra for maior que 100?
+R: Funciona perfeitamente! O código foi testado com amostras de
+   até 10.000 respondentes. Apenas altere n_respondentes ou use
+   seus próprios dados.
+
+P: Preciso de permissão para usar o PHQ-9?
+R: O PHQ-9 é de domínio público para uso clínico e de pesquisa.
+   Não requer permissão ou pagamento. Disponível gratuitamente em
+   https://www.phqscreeners.com/
+
+P: Como cito este código em publicações?
+R: Você pode citar como: "Dados processados utilizando script 
+   personalizado em R para análise do PHQ-9, baseado nas diretrizes
+   de Kroenke et al. (2001)". Cite sempre o artigo original do PHQ-9.
+
+P: O que fazer se encontrar um erro?
+R: Verifique:
+   1. Pacotes instalados corretamente
+   2. Dados no formato correto (ver seção "Estrutura de Dados")
+   3. Versão atualizada do R (≥ 4.0)
+   4. Diretório de trabalho correto (use getwd())
+   5. Arquivos na estrutura de pastas esperada
+
+P: Posso usar com dados parciais (respostas faltantes)?
+R: Os scripts atuais não tratam dados faltantes automaticamente.
+   Você pode:
+   • Excluir casos com dados faltantes (completo)
+   • Imputar valores faltantes (com cuidado metodológico)
+   • Modificar os scripts para tratamento específico
+
+P: Como interpreto um resultado estatisticamente significativo mas
+   com efeito pequeno?
+R: Significância estatística (p < 0.05) indica que o efeito 
+   provavelmente não é devido ao acaso. Tamanho do efeito (d de Cohen)
+   indica a magnitude prática. Um efeito pequeno mas significativo
+   pode não ter relevância clínica. Sempre considere o contexto.
+
+P: Posso combinar análise básica e avançada?
+R: Sim! Você pode executar ambas no mesmo projeto. Use prefixos
+   diferentes nos arquivos de saída para não sobrescrever resultados.
+
+P: Como faço análise pré-pós intervenção?
+R: Use a função analisar_phq9() com prefixos diferentes:
+   res_pre <- analisar_phq9(dados_pre, prefixo_arquivo = "Pre")
+   res_pos <- analisar_phq9(dados_pos, prefixo_arquivo = "Pos")
+   Depois compare as médias com teste t pareado.
+
+================================================================================
+
+✅ CHECKLIST DE USO
+====================
+
+ANTES DE COMEÇAR:
+□ R instalado (versão ≥ 4.0)
+□ RStudio instalado (recomendado mas não obrigatório)
+□ Conexão à internet (primeira vez - para instalar pacotes)
+□ Estrutura de pastas do projeto PHQ-9/
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PRIMEIRA EXECUÇÃO (apenas uma vez):
+□ Execute: source("00_configuracao_inicial.R")
+□ Aguarde instalação de pacotes
+□ Verifique que todas as pastas foram criadas
+□ Verifique que pacotes foram instalados corretamente
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PARA ANÁLISE BÁSICA:
+□ Execute: source("scripts/analise_phq9_basico.R")
+□ Verifique que 6 CSVs foram gerados em resultados/csv/
+□ Verifique que 6 PNGs foram gerados em resultados/graficos/
+□ Revise estatísticas no console
+□ Execute: source("scripts/relatorio_phq9_basico.R")
+□ Verifique HTML em resultados/html/
+□ Verifique PDF em resultados/pdf/ (se LaTeX instalado)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PARA ANÁLISE AVANÇADA:
+□ Execute: source("scripts/analise_phq9_avancado.R")
+□ Verifique que 5 CSVs foram gerados em resultados/csv/
+□ Verifique que 6 PNGs foram gerados em resultados/graficos/
+□ Revise estatísticas e testes no console
+□ Execute: source("scripts/relatorio_phq9_avancado.R")
+□ Verifique HTML em resultados/html/
+□ Verifique PDF em resultados/pdf/ (se LaTeX instalado)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+COM DADOS REAIS:
+□ CSV no formato correto (ver seção "Estrutura de Dados")
+□ Validar dados: summary(dados), colSums(is.na(dados))
+□ Valores PHQ9 entre 0-3
+□ Sexo codificado como "M" ou "F"
+□ Idade numérica e realista (18-100)
+□ Sem valores faltantes críticos
+□ Carregar dados: meus_dados <- read_csv("arquivo.csv")
+□ Processar: resultado <- analisar_phq9(meus_dados)
+□ Gerar relatório
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PARA RELATÓRIO PDF:
+□ LaTeX ou TinyTeX instalado
+□ Se não: install.packages("tinytex"); tinytex::install_tinytex()
+□ Execute script de relatório
+□ Aguarde geração (~1-2 min primeira vez)
+□ Verifique PDF gerado em resultados/pdf/
+
+================================================================================
+
+📞 SUPORTE E DOCUMENTAÇÃO ADICIONAL
+====================================
+
+Para mais informações sobre as ferramentas utilizadas:
+
+R e RSTUDIO:
+🌐 https://www.r-project.org/
+🌐 https://posit.co/download/rstudio-desktop/
+📚 Tutoriais: https://education.rstudio.com/
+
+TIDYVERSE:
+🌐 https://www.tidyverse.org/
+📚 R for Data Science: https://r4ds.had.co.nz/
+
+GGPLOT2:
+🌐 https://ggplot2.tidyverse.org/
+📚 Galeria de exemplos: https://r-graph-gallery.com/
+
+RMARKDOWN:
+🌐 https://rmarkdown.rstudio.com/
+📚 Guia definitivo: https://bookdown.org/yihui/rmarkdown/
+
+PSYCH (análises psicométricas):
+📚 Documentation: https://personality-project.org/r/psych/
+
+DOCUMENTAÇÃO DOS PACOTES (dentro do R):
+?tidyverse
+?psych::alpha
+?ggplot2::ggplot
+?rmarkdown::render
+
+COMUNIDADES R:
+🌐 RStudio Community: https://community.rstudio.com/
+🌐 Stack Overflow: https://stackoverflow.com/questions/tagged/r
+
+================================================================================
+
+Versão: 3.0
+Última atualização: Novembro 2025
+Compatibilidade: R ≥ 4.0, tidyverse ≥ 1.3
+Licença: Uso livre para fins acadêmicos e clínicos
+
+================================================================================

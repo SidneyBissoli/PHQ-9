@@ -1,0 +1,473 @@
+---
+title: "Relatório de Análise PHQ-9"
+subtitle: "Patient Health Questionnaire - 9 (Análise Avançada)"
+author: "Análise Psicológica"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+lang: en   
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: united
+    code_folding: hide
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    latex_engine: xelatex
+    keep_tex: false
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+  root.dir = here(),
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = 'center',
+  fig.width = 8,
+  fig.height = 6,
+  fig.pos = "H"
+)
+
+# Carregar pacotes
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(here)  
+library(tinytex)  
+
+# CONFIGURAÇÃO IMPORTANTE: Define o working directory como a raiz do projeto
+# Isso garante que os caminhos relativos funcionem corretamente
+knitr::opts_knit$set(base.dir = here())
+```
+
+```{r verificar_arquivos, include=FALSE}
+# Função para verificar existência de arquivos e listar o que falta
+verificar_requisitos <- function() {
+  
+  # Arquivos CSV necessários
+  arquivos_csv <- c(
+    "PHQ9_analise_dados_processados.csv",
+    "PHQ9_analise_itens_detalhada.csv",
+    "PHQ9_analise_bivariada.csv",
+    "PHQ9_confiabilidade.csv",
+    "PHQ9_relatorio_executivo.csv"
+  )
+  
+  # Arquivos de gráficos necessários
+  arquivos_graficos <- c(
+    "PHQ9_AVA_1_analise_itens.png",
+    "PHQ9_AVA_2_comparacao_sexos.png",
+    "PHQ9_AVA_3_idade_escore_dispersao.png",
+    "PHQ9_AVA_4_heatmap_respostas.png",
+    "PHQ9_AVA_5_severidade_sexo_prop.png",
+    "PHQ9_AVA_6_violin_faixa_etaria.png"
+  )
+  
+  # Construir caminhos completos
+  caminho_csv <- file.path(here::here(), "resultados", "csv")
+  caminho_graf <- file.path(here::here(), "resultados", "graficos")
+  
+  # Verificar CSVs
+  csv_faltando <- arquivos_csv[!file.exists(file.path(caminho_csv, arquivos_csv))]
+  graficos_faltando <- arquivos_graficos[!file.exists(file.path(caminho_graf, arquivos_graficos))]
+  
+  if (length(csv_faltando) > 0 || length(graficos_faltando) > 0) {
+    mensagem <- paste0(
+      "❌ ERRO: Arquivos necessários não foram encontrados!\n\n",
+      "Diretório de trabalho: ", here::here(), "\n\n"
+    )
+    
+    if (length(csv_faltando) > 0) {
+      mensagem <- paste0(mensagem, 
+                        "CSVs faltando na pasta resultados/csv/:\n",
+                        paste("  -", csv_faltando, collapse = "\n"), "\n\n")
+    }
+    
+    if (length(graficos_faltando) > 0) {
+      mensagem <- paste0(mensagem,
+                        "Gráficos faltando na pasta resultados/graficos/:\n",
+                        paste("  -", graficos_faltando, collapse = "\n"), "\n\n")
+    }
+    
+    mensagem <- paste0(mensagem,
+                      "⚠️ SOLUÇÃO:\n",
+                      "Execute o script 'scripts/analise_phq9_avancado.R' completamente\n",
+                      "antes de gerar este relatório.\n")
+    
+    stop(mensagem)
+  }
+  
+  return(TRUE)
+}
+
+# Verificar antes de continuar
+verificar_requisitos()
+```
+
+
+# Sumário Executivo
+
+Este relatório apresenta uma análise psicométrica **avançada e completa** do **PHQ-9 (Patient Health Questionnaire-9)**, incluindo análises bivariadas, medidas de confiabilidade e visualizações sofisticadas.
+
+```{r carregarDados}
+# Construir caminhos completos
+caminho_csv <- here("resultados", "csv")
+
+# Carregar dados processados
+dados <- read.csv2(file.path(caminho_csv, "PHQ9_analise_dados_processados.csv"), 
+                   fileEncoding = "latin1")
+
+# Carregar análise de itens
+itens <- read.csv2(file.path(caminho_csv, "PHQ9_analise_itens_detalhada.csv"), 
+                   fileEncoding = "latin1")
+
+# Carregar análise bivariada
+bivariada <- read.csv2(file.path(caminho_csv, "PHQ9_analise_bivariada.csv"), 
+                       fileEncoding = "latin1")
+
+# Carregar confiabilidade
+confiabilidade <- read.csv2(file.path(caminho_csv, "PHQ9_confiabilidade.csv"), 
+                            fileEncoding = "latin1")
+
+# Carregar relatório executivo
+resumo <- read.csv2(file.path(caminho_csv, "PHQ9_relatorio_executivo.csv"), 
+                    fileEncoding = "latin1")
+
+# Calcular estatísticas básicas
+n_total <- nrow(dados)
+idade_media <- mean(dados$idade, na.rm = TRUE)
+idade_dp <- sd(dados$idade, na.rm = TRUE)
+escore_medio <- mean(dados$escore_total, na.rm = TRUE)
+escore_dp <- sd(dados$escore_total, na.rm = TRUE)
+```
+
+## Principais Achados
+
+- **Amostra:** `r n_total` participantes (Idade: M = `r round(idade_media, 1)`, DP = `r round(idade_dp, 1)`)
+- **Escore Médio PHQ-9:** `r round(escore_medio, 2)` (DP = `r round(escore_dp, 2)`)
+- **Intervalo de Escores:** `r min(dados$escore_total)` a `r max(dados$escore_total)`
+- **Confiabilidade:** Alfa de Cronbach = `r confiabilidade$Valor[1]`
+
+# Caracterização da Amostra
+
+## Estatísticas Descritivas
+
+```{r descritivas}
+# Tabela de características demográficas
+tab_demografica <- data.frame(
+  Característica = c("N total", "Idade (M ± DP)", "Idade (Min-Max)", 
+                     "Sexo Masculino", "Sexo Feminino"),
+  Valor = c(
+    as.character(n_total),
+    sprintf("%.1f ± %.1f", idade_media, idade_dp),
+    sprintf("%d - %d", min(dados$idade), max(dados$idade)),
+    sprintf("%d (%.1f%%)", 
+            sum(dados$sexo == "M"), 
+            sum(dados$sexo == "M") / n_total * 100),
+    sprintf("%d (%.1f%%)", 
+            sum(dados$sexo == "F"), 
+            sum(dados$sexo == "F") / n_total * 100)
+  )
+)
+
+kable(tab_demografica,
+      col.names = c("Característica", "Valor"),
+      caption = "Características Demográficas da Amostra",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "striped"),
+                full_width = FALSE)
+```
+
+## Distribuição de Severidade
+
+```{r severidade}
+tab_severidade <- dados %>%
+  count(severidade) %>%
+  mutate(Percentual = (n / sum(n)) * 100) %>%
+  arrange(severidade)
+
+kable(tab_severidade,
+      col.names = c("Severidade", "N", "Percentual (%)"),
+      caption = "Distribuição de Severidade dos Sintomas Depressivos",
+      booktabs = TRUE,
+      digits = 1) %>%
+  kable_styling(latex_options = c("hold_position", "striped"),
+                full_width = FALSE)
+```
+
+**Interpretação dos Pontos de Corte:**
+
+- **Mínima (0-4):** Sintomas mínimos ou ausentes
+- **Leve (5-9):** Sintomas leves; acompanhamento e psicoeducação
+- **Moderada (10-14):** Sintomas moderados; considerar psicoterapia
+- **Moderadamente Grave (15-19):** Sintomas graves; tratamento recomendado
+- **Grave (20-27):** Sintomas muito graves; tratamento urgente
+
+# Análise de Confiabilidade
+
+## Alfa de Cronbach
+
+```{r confiabilidade}
+kable(confiabilidade,
+      col.names = c("Métrica", "Valor"),
+      caption = "Análise de Confiabilidade: Alfa de Cronbach",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "striped"),
+                full_width = FALSE)
+```
+
+**Interpretação do Alfa de Cronbach:**
+
+- **>= 0.90:** Excelente
+- **0.80 - 0.89:** Bom
+- **0.70 - 0.79:** Aceitável
+- **0.60 - 0.69:** Questionável
+- **< 0.60:** Inaceitável
+
+O PHQ-9 geralmente apresenta alfa > 0.80 na literatura internacional, indicando boa consistência interna.
+
+# Análise de Itens Individuais
+
+## Estatísticas por Item
+
+```{r analise_itens}
+# Selecionar colunas principais
+itens_tab <- itens %>%
+  select(Item, Descrição, Média, DP, Mediana) %>%
+  arrange(desc(Média))
+
+kable(itens_tab,
+      caption = "Estatísticas Descritivas por Item (ordenado por prevalência)",
+      booktabs = TRUE,
+      digits = 2) %>%
+ kable_styling(latex_options = c("hold_position", "striped", "scale_down"),  
+              font_size = 8) %>%
+  column_spec(2, width = "8cm")  
+```
+
+**Interpretação:** Itens com médias mais altas indicam sintomas mais prevalentes na amostra. O item 9 (pensamentos de morte/autolesão) merece atenção especial em qualquer pontuação > 0.
+
+## Visualização das Médias por Item
+
+```{r fig1, fig.cap="Média de respostas por item do PHQ-9 com intervalo de confiança", out.width='85%'}
+# Calcular caminho absoluto inline para garantir que funciona sempre
+knitr::include_graphics(here("resultados", "graficos", "PHQ9_AVA_1_analise_itens.png"))
+```
+
+# Análises Bivariadas
+
+## Resumo das Análises Estatísticas
+
+```{r analise_bivariada_completa}
+kable(bivariada,
+      caption = "Resultados das Análises Bivariadas",
+      booktabs = TRUE,
+      digits = 4) %>%
+  kable_styling(latex_options = c("hold_position", "striped", "scale_down"),
+                full_width = FALSE)
+```
+
+## Comparação entre Sexos
+
+```{r teste_t}
+# Realizar teste t
+teste <- t.test(escore_total ~ sexo, data = dados)
+
+cat(sprintf("**Teste t de Student:**\n\n"))
+cat(sprintf("- t(%.1f) = %.2f\n", 
+            teste$parameter, teste$statistic))
+cat(sprintf("- p-valor = %.4f\n", teste$p.value))
+cat(sprintf("- Diferença significativa: %s\n\n", 
+            ifelse(teste$p.value < 0.05, "Sim (p < 0,05)", "Não (p >= 0,05)")))
+
+# Calcular d de Cohen
+d_cohen <- (mean(dados$escore_total[dados$sexo == "M"], na.rm = TRUE) - 
+            mean(dados$escore_total[dados$sexo == "F"], na.rm = TRUE)) / 
+           sd(dados$escore_total, na.rm = TRUE)
+
+cat(sprintf("**Tamanho do efeito (d de Cohen):** %.2f\n\n", abs(d_cohen)))
+
+interpretacao_d <- case_when(
+  abs(d_cohen) < 0.2 ~ "trivial",
+  abs(d_cohen) < 0.5 ~ "pequeno",
+  abs(d_cohen) < 0.8 ~ "médio",
+  TRUE ~ "grande"
+)
+cat(sprintf("*Interpretação:* Tamanho de efeito %s", interpretacao_d))
+```
+
+### Visualização: Comparação entre Sexos
+
+```{r fig2, fig.cap="Boxplot comparando escores PHQ-9 entre sexos", out.width='85%'}
+knitr::include_graphics("../resultados/graficos/PHQ9_AVA_2_comparacao_sexos.png")
+```
+
+## Correlação entre Idade e Escore Total
+
+```{r correlacao_idade}
+# Calcular correlação
+cor_teste <- cor.test(dados$idade, dados$escore_total)
+
+cat(sprintf("**Correlação de Pearson:**\n\n"))
+cat(sprintf("- r = %.3f\n", cor_teste$estimate))
+cat(sprintf("- p-valor = %.4f\n", cor_teste$p.value))
+cat(sprintf("- Correlação significativa: %s\n\n", 
+            ifelse(cor_teste$p.value < 0.05, "Sim (p < 0,05)", "Não (p >= 0,05)")))
+
+interpretacao_r <- case_when(
+  abs(cor_teste$estimate) < 0.3 ~ "fraca",
+  abs(cor_teste$estimate) < 0.7 ~ "moderada",
+  TRUE ~ "forte"
+)
+cat(sprintf("*Interpretação:* Correlação %s entre idade e escore PHQ-9", interpretacao_r))
+```
+
+### Visualização: Dispersão Idade x Escore
+
+```{r fig3, fig.cap="Gráfico de dispersão: Idade vs Escore PHQ-9 por sexo", out.width='85%'}
+knitr::include_graphics("../resultados/graficos/PHQ9_AVA_3_idade_escore_dispersao.png")
+```
+
+# Visualizações Avançadas
+
+## Padrão de Respostas Individual
+
+```{r fig4, fig.cap="Heatmap: Padrão de respostas aos itens do PHQ-9", out.width='85%'}
+knitr::include_graphics("../resultados/graficos/PHQ9_AVA_4_heatmap_respostas.png")
+```
+
+Este gráfico mostra o padrão de respostas de uma amostra de participantes. Cores mais quentes (vermelho) indicam respostas de maior frequência (2-3), enquanto cores mais frias (verde) indicam menor frequência (0-1).
+
+## Severidade por Sexo (Proporções)
+
+```{r fig5, fig.cap="Distribuição proporcional de severidade por sexo", out.width='85%'}
+knitr::include_graphics("../resultados/graficos/PHQ9_AVA_5_severidade_sexo_prop.png")
+```
+
+## Distribuição por Faixa Etária
+
+```{r fig6, fig.cap="Violin plots: Distribuição de escores por faixa etária", out.width='85%'}
+knitr::include_graphics("../resultados/graficos/PHQ9_AVA_6_violin_faixa_etaria.png")
+```
+
+Os violin plots combinam boxplots com densidade de distribuição, permitindo visualizar tanto medidas de tendência central quanto a forma da distribuição dos escores em cada faixa etária.
+
+# Conclusões e Recomendações
+
+## Principais Achados
+
+1. **Caracterização da Amostra:** A amostra consistiu de `r n_total` participantes com idade média de `r round(idade_media, 1)` anos (DP = `r round(idade_dp, 1)`).
+
+2. **Prevalência de Sintomas:** O escore médio do PHQ-9 foi de `r round(escore_medio, 2)` pontos (DP = `r round(escore_dp, 2)`).
+
+3. **Confiabilidade:** O instrumento demonstrou `r confiabilidade$Valor[confiabilidade$Métrica == "Interpretação"]` consistência interna nesta amostra.
+
+4. **Diferenças por Sexo:** `r ifelse(teste$p.value < 0.05, paste0("Foram encontradas diferenças significativas entre os sexos (p = ", round(teste$p.value, 4), ")"), "Não foram encontradas diferenças significativas entre os sexos")`.
+
+5. **Relação com Idade:** `r ifelse(cor_teste$p.value < 0.05, paste0("Houve correlação significativa entre idade e escore PHQ-9 (r = ", round(cor_teste$estimate, 3), ", p = ", round(cor_teste$p.value, 4), ")"), "Não houve correlação significativa entre idade e escore PHQ-9")`.
+
+## Recomendações Clínicas
+
+**ATENÇÃO:** Este relatório apresenta análises estatísticas. Para decisões clínicas:
+
+1. **Escores >= 10:** Indicam necessidade de avaliação clínica mais aprofundada
+2. **Item 9 > 0:** Qualquer pontuação no item sobre pensamentos de morte/autolesão requer avaliação imediata de risco
+3. **Acompanhamento:** Recomenda-se reavaliação periódica para monitorar mudanças nos sintomas
+4. **Tratamento por Severidade:**
+   - **Mínima:** Psicoeducação, monitoramento
+   - **Leve:** Acompanhamento regular, técnicas de autocuidado
+   - **Moderada:** Psicoterapia recomendada
+   - **Moderadamente Grave:** Psicoterapia + considerar farmacoterapia
+   - **Grave:** Tratamento intensivo (psicoterapia + farmacoterapia)
+
+## Limitações
+
+- PHQ-9 é instrumento de **triagem**, não de diagnóstico
+- Não substitui avaliação clínica completa por profissional qualificado
+- Considerar contexto cultural e socioeconômico na interpretação
+- Possível viés de resposta (desejabilidade social)
+- Sintomas podem variar; avaliações seriadas oferecem melhor panorama
+
+\newpage
+
+# Referências
+
+## Artigos Fundamentais
+
+1. **Kroenke, K., Spitzer, R. L., & Williams, J. B. (2001).** The PHQ-9: validity of a brief depression severity measure. *Journal of General Internal Medicine*, 16(9), 606-613.
+
+2. **Manea, L., Gilbody, S., & McMillan, D. (2012).** Optimal cut-off score for diagnosing depression with the PHQ-9: a meta-analysis. *CMAJ*, 184(3), E191-E196.
+
+3. **Levis, B., et al. (2019).** Accuracy of Patient Health Questionnaire-9 (PHQ-9) for screening to detect major depression. *BMJ*, 365, l1476.
+
+4. **Kroenke, K., Spitzer, R. L., Williams, J. B., & Löwe, B. (2010).** The Patient Health Questionnaire Somatic, Anxiety, and Depressive Symptom Scales: a systematic review. *General Hospital Psychiatry*, 32(4), 345-359.
+
+## Manuais Diagnósticos
+
+5. **American Psychiatric Association. (2013).** *Diagnostic and statistical manual of mental disorders* (5th ed.). Arlington, VA: American Psychiatric Publishing.
+
+## Recursos Online
+
+- **Site oficial do PHQ-9:** https://www.phqscreeners.com/
+- **Versões traduzidas:** Disponíveis gratuitamente no site oficial
+
+\newpage
+
+# Apêndice: Informações Técnicas
+
+## Sobre o PHQ-9
+
+O **Patient Health Questionnaire-9 (PHQ-9)** é um instrumento de auto-relato de 9 itens que avalia a presença e severidade de sintomas depressivos nas últimas duas semanas, baseado nos critérios diagnósticos do DSM para Transtorno Depressivo Maior.
+
+**Características:**
+
+- **Tempo de aplicação:** 2-5 minutos
+- **Pontuação:** 0-27 pontos (soma dos 9 itens)
+- **Escala de resposta:** 0 (nenhuma vez) a 3 (quase todos os dias)
+- **Domínio público:** Uso livre para fins clínicos e de pesquisa
+- **Propriedades psicométricas:** Validado em múltiplas populações e idiomas
+
+## Interpretação dos Resultados
+
+**Pontos de Corte Sugeridos (Kroenke et al., 2001):**
+
+```{r tabela_pontos_corte}
+tab_pontos_corte <- data.frame(
+  Escore = c("0-4", "5-9", "10-14", "15-19", "20-27"),
+  Severidade = c("Mínima", "Leve", "Moderada", "Mod. Grave", "Grave"),
+  `Ação Clínica Sugerida` = c("Nenhuma", "Acompanhamento", 
+                               "Plano de tratamento", 
+                               "Tratamento ativo", 
+                               "Tratamento imediato"),
+  check.names = FALSE
+)
+
+kable(tab_pontos_corte,
+      booktabs = TRUE,
+      align = c("c", "l", "l")) %>%
+  kable_styling(latex_options = c("hold_position", "striped"),
+                full_width = FALSE)
+```
+
+**Sensibilidade e Especificidade:**
+
+Para ponto de corte >= 10:
+- **Sensibilidade:** 88%
+- **Especificidade:** 88%
+
+## Uso Ético
+
+- Sempre obter consentimento informado
+- Garantir confidencialidade dos dados
+- Explicar propósito e limitações do instrumento
+- Fornecer feedback apropriado aos participantes
+- Não usar como única base para decisões clínicas
+- Encaminhar para profissionais qualificados quando apropriado
+
+---
+
+**Relatório gerado automaticamente em:** `r Sys.time()`  
+**Sistema de análise:** PHQ-9 v2.0 (Análise Avançada)
