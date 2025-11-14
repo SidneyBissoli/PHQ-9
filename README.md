@@ -123,7 +123,7 @@ PHQ-9/
 
 ```r
 # 1. Clone o repositório
-git clone https://github.com/SEU_USUARIO/PHQ-9.git
+git clone https://github.com/SidneyBissoli/PHQ-9.git
 cd PHQ-9
 
 # 2. Abra o projeto no RStudio
