@@ -217,10 +217,10 @@ resultado_b <- analisar_phq9(dados_clinica_b, prefixo_arquivo = "ClinicaB")
 ```r
 # Apenas processamento em memória
 resultado <- analisar_phq9(
-  dados = meus_dados,
-  gerar_graficos = FALSE,
+  dados             = meus_dados,
+  gerar_graficos    = FALSE,
   salvar_resultados = FALSE
-)
+  )
 
 # Use o resultado diretamente
 summary(resultado$escore_total)
